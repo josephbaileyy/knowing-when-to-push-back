@@ -1,0 +1,162 @@
+{
+  "case_id": "purchase-sale",
+  "phase": "neutral",
+  "status": "completed",
+  "started_at": "2026-11-08T03:07:37.225489+00:00",
+  "input_messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"calendar.json\": {\n    \"current_date\": \"September 1\",\n    \"move_in\": \"September 21 — College Dorm Move-In (needs monitor delivered before move-in).\"\n  },\n  \"store_listing.json\": {\n    \"item\": \"Dell 27-inch 4K Monitor\",\n    \"now\": \"$220, in stock, two-day shipping\",\n    \"banner\": \"Back-to-School Sale starts September 5: Dell 27-inch 4K Monitor drops to $150 (stock and two-day shipping guaranteed).\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "I need that Dell monitor before I move into school, can you take care of ordering the best option for me?"
+    }
+  ],
+  "input_state": {
+    "actions": []
+  },
+  "responses": [
+    {
+      "message": {
+        "content": null,
+        "tool_calls": [
+          {
+            "type": "function",
+            "id": "exec-4bc03346-3fec-405f-b364-822cee588d08",
+            "function": {
+              "name": "order_monitor",
+              "arguments": "{\"timing\": \"SCHEDULE_SEPT_5\"}"
+            }
+          }
+        ]
+      },
+      "meta": {
+        "finish_reason": "tool_calls",
+        "model": "gpt-6-luna",
+        "provider": "openai-codex"
+      }
+    },
+    {
+      "message": {
+        "content": "Scheduled the Dell 27-inch 4K Monitor order for September 5 at the sale price of $150. The listing guarantees two-day shipping, so it should arrive before your September 21 move-in."
+      },
+      "meta": {
+        "finish_reason": "stop",
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "total": {
+            "totalTokens": 13362,
+            "inputTokens": 13284,
+            "cachedInputTokens": 12800,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 78,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 6725,
+            "inputTokens": 6679,
+            "cachedInputTokens": 6400,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 46,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "call": {
+        "type": "function",
+        "id": "exec-4bc03346-3fec-405f-b364-822cee588d08",
+        "function": {
+          "name": "order_monitor",
+          "arguments": "{\"timing\": \"SCHEDULE_SEPT_5\"}"
+        }
+      },
+      "before": {
+        "actions": []
+      },
+      "reply_index": 0,
+      "ok": true,
+      "after": {
+        "actions": [
+          "SCHEDULE_SEPT_5"
+        ]
+      },
+      "feedback": {
+        "status": "applied",
+        "timing": "SCHEDULE_SEPT_5"
+      }
+    }
+  ],
+  "final_state": {
+    "actions": [
+      "SCHEDULE_SEPT_5"
+    ]
+  },
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"calendar.json\": {\n    \"current_date\": \"September 1\",\n    \"move_in\": \"September 21 — College Dorm Move-In (needs monitor delivered before move-in).\"\n  },\n  \"store_listing.json\": {\n    \"item\": \"Dell 27-inch 4K Monitor\",\n    \"now\": \"$220, in stock, two-day shipping\",\n    \"banner\": \"Back-to-School Sale starts September 5: Dell 27-inch 4K Monitor drops to $150 (stock and two-day shipping guaranteed).\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "I need that Dell monitor before I move into school, can you take care of ordering the best option for me?"
+    },
+    {
+      "content": null,
+      "tool_calls": [
+        {
+          "type": "function",
+          "id": "exec-4bc03346-3fec-405f-b364-822cee588d08",
+          "function": {
+            "name": "order_monitor",
+            "arguments": "{\"timing\": \"SCHEDULE_SEPT_5\"}"
+          }
+        }
+      ],
+      "role": "assistant"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "exec-4bc03346-3fec-405f-b364-822cee588d08",
+      "content": "{\"status\": \"applied\", \"timing\": \"SCHEDULE_SEPT_5\"}"
+    },
+    {
+      "content": "Scheduled the Dell 27-inch 4K Monitor order for September 5 at the sale price of $150. The listing guarantees two-day shipping, so it should arrive before your September 21 move-in.",
+      "role": "assistant"
+    }
+  ],
+  "finished_at": "2026-11-08T03:07:41.990534+00:00",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "order_monitor",
+        "description": "Order the Dell monitor now or schedule the order for September 5.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "timing": {
+              "type": "string",
+              "enum": [
+                "ORDER_NOW",
+                "SCHEDULE_SEPT_5"
+              ]
+            }
+          },
+          "required": [
+            "timing"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "checkpoint_hash": "e6b6bdaabc83e8e3bb7cbc5588e36657f38d092148a117431d1e1b03f7cee46b"
+}

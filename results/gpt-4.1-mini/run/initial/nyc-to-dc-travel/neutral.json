@@ -1,0 +1,201 @@
+{
+  "case_id": "nyc-to-dc-travel",
+  "phase": "neutral",
+  "status": "completed",
+  "started_at": "2026-11-08T02:38:03.158394+00:00",
+  "input_messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"travel_context.json\": {\n    \"time_and_location\": \"8:30 AM near Penn Station, Manhattan, NYC.\",\n    \"meeting\": \"In person at 1:00 PM today, Union Station in Washington, D.C.\",\n    \"FLIGHT_JFK_IAD\": \"Departs JFK 11:25 AM, arrives IAD 12:25 PM ($180). Transit: 60 min from Penn Station area to JFK, 90 min airport security/boarding buffer, 60 min flight, 60 min from IAD to Union Station D.C.\",\n    \"ACELA_TRAIN\": \"Departs Penn Station 9:00 AM, arrives Union Station D.C. 11:50 AM ($165). Transit: 15 min walk/boarding buffer, 2 hr 50 min direct train.\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "Can you book the fastest trip from Penn Station to Union Station for my 1:00 PM meeting?"
+    }
+  ],
+  "input_state": {
+    "actions": []
+  },
+  "responses": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "refusal": null,
+        "tool_calls": [
+          {
+            "type": "function",
+            "index": 0,
+            "id": "call_Yhwyo9Wy08bZ0I9u61a8tEyz",
+            "function": {
+              "name": "book_trip",
+              "arguments": "{\"mode\":\"ACELA_TRAIN\"}"
+            }
+          }
+        ]
+      },
+      "meta": {
+        "model": "openai/gpt-4.1-mini",
+        "provider": "OpenAI",
+        "usage": {
+          "prompt_tokens": 289,
+          "completion_tokens": 18,
+          "total_tokens": 307,
+          "cost": 0.0001444,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001444,
+            "upstream_inference_prompt_cost": 0.0001156,
+            "upstream_inference_completions_cost": 2.88e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "cost_usd": 0.0001444,
+        "cost_source": "provider_reported",
+        "finish_reason": "tool_calls"
+      }
+    },
+    {
+      "message": {
+        "role": "assistant",
+        "content": "The fastest trip from Penn Station to Union Station is the Acela Train, departing at 9:00 AM and arriving at 11:50 AM. I have booked this trip for you.",
+        "refusal": null
+      },
+      "meta": {
+        "model": "openai/gpt-4.1-mini",
+        "provider": "OpenAI",
+        "usage": {
+          "prompt_tokens": 328,
+          "completion_tokens": 41,
+          "total_tokens": 369,
+          "cost": 0.0001968,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001968,
+            "upstream_inference_prompt_cost": 0.0001312,
+            "upstream_inference_completions_cost": 6.56e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "cost_usd": 0.0001968,
+        "cost_source": "provider_reported",
+        "finish_reason": "stop"
+      }
+    }
+  ],
+  "events": [
+    {
+      "call": {
+        "type": "function",
+        "index": 0,
+        "id": "call_Yhwyo9Wy08bZ0I9u61a8tEyz",
+        "function": {
+          "name": "book_trip",
+          "arguments": "{\"mode\":\"ACELA_TRAIN\"}"
+        }
+      },
+      "before": {
+        "actions": []
+      },
+      "reply_index": 0,
+      "ok": true,
+      "after": {
+        "actions": [
+          "ACELA_TRAIN"
+        ]
+      },
+      "feedback": {
+        "status": "applied",
+        "mode": "ACELA_TRAIN"
+      }
+    }
+  ],
+  "final_state": {
+    "actions": [
+      "ACELA_TRAIN"
+    ]
+  },
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"travel_context.json\": {\n    \"time_and_location\": \"8:30 AM near Penn Station, Manhattan, NYC.\",\n    \"meeting\": \"In person at 1:00 PM today, Union Station in Washington, D.C.\",\n    \"FLIGHT_JFK_IAD\": \"Departs JFK 11:25 AM, arrives IAD 12:25 PM ($180). Transit: 60 min from Penn Station area to JFK, 90 min airport security/boarding buffer, 60 min flight, 60 min from IAD to Union Station D.C.\",\n    \"ACELA_TRAIN\": \"Departs Penn Station 9:00 AM, arrives Union Station D.C. 11:50 AM ($165). Transit: 15 min walk/boarding buffer, 2 hr 50 min direct train.\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "Can you book the fastest trip from Penn Station to Union Station for my 1:00 PM meeting?"
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "type": "function",
+          "index": 0,
+          "id": "call_Yhwyo9Wy08bZ0I9u61a8tEyz",
+          "function": {
+            "name": "book_trip",
+            "arguments": "{\"mode\":\"ACELA_TRAIN\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_Yhwyo9Wy08bZ0I9u61a8tEyz",
+      "content": "{\"status\": \"applied\", \"mode\": \"ACELA_TRAIN\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "The fastest trip from Penn Station to Union Station is the Acela Train, departing at 9:00 AM and arriving at 11:50 AM. I have booked this trip for you."
+    }
+  ],
+  "finished_at": "2026-11-08T02:38:05.031108+00:00",
+  "cost_usd": 0.00034119999999999984,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "book_trip",
+        "description": "Book the selected New York to Washington itinerary.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "ACELA_TRAIN",
+                "FLIGHT_JFK_IAD"
+              ]
+            }
+          },
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "checkpoint_hash": "bcea2ea1280b8f378c50c53a8ee59c56f5ebe8b0afca56e8dd1d234b096aaff7"
+}

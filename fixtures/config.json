@@ -1,0 +1,17 @@
+{
+  "study": "knowing-when-to-push-back",
+  "model": "openai/gpt-4.1-mini",
+  "provider_order": [
+    "OpenAI"
+  ],
+  "temperature": 0,
+  "max_output_tokens": 640,
+  "max_calls": 4,
+  "max_cost_usd": 0.5,
+  "turn_cost_cap_usd": 0.04,
+  "prompt_price_ceiling_per_million": 0.6,
+  "completion_price_ceiling_per_million": 2.4,
+  "rate_limit_retries": 1,
+  "rate_limit_backoff_seconds": 15,
+  "request_interval_seconds": 1
+}

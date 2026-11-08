@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Knowing When to Push Back • CS 329Z Midpoint Demo</title>
+<style>
+:root{font:24px/1.4 Arial,Helvetica,sans-serif;color:#555;background:#eee}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+nav{max-width:1280px;margin:auto;padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+nav button{font:600 16px Arial;color:#333;background:white;border:1px solid #bdbdbd;border-radius:3px;padding:6px 10px;cursor:pointer}
+nav button[aria-current=true]{background:#8c1515;color:white;border-color:#8c1515}
+nav .hint{font-size:15px;margin-left:auto}
+nav button:disabled{opacity:.4;cursor:default}
+.scene{position:relative;background:#fff;max-width:1280px;min-height:720px;margin:0 auto 20px;padding:55px 55px 89px}
+.scene h1{color:#111;font-size:48px;font-weight:400;letter-spacing:-.024em;line-height:1.08;margin:0 0 16px}
+.scene h2{color:#8c1515;font-size:29px;line-height:1.15;margin:0 0 18px}
+.scene h3{color:#111;font-size:25px;margin:0 0 10px}
+.scene h4{font-size:16px;font-weight:700;color:#8c1515;margin:18px 0 5px;text-transform:uppercase;letter-spacing:.03em}
+.scene p{margin:0 0 16px}
+.scene .subtitle{font-size:24px;margin:-2px 0 23px}
+.cover{padding-top:143px}
+.cover h1{font-size:69px}
+.cover h2{font-size:32px;margin-bottom:26px}
+.cover .course{font-size:21px;font-weight:700;color:#8c1515;margin-bottom:20px}
+.cover .byline{font-size:21px;color:#555;margin-top:28px}
+.cover .lead{font-size:28px;max-width:900px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.split.equal{gap:32px}
+.split.ratio{grid-template-columns:1.15fr .85fr}
+.pane{min-width:0}
+.pane+.pane{border-left:1px solid #d4d4d4;padding-left:32px}
+ul{padding-left:24px;margin:0}
+li+li{margin-top:11px}
+table{border-collapse:collapse;width:100%;margin:10px 0 16px;font-size:22px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #d5d5d5}
+th{font-weight:700;color:#222;border-bottom:2px solid #242424}
+td.count,th.count{text-align:center;width:21%}
+td strong{color:#8c1515}
+.callout{border:1px solid #242424;padding:12px 16px;color:#494949}
+.callout strong{color:#111}
+.chat-grid{display:grid;grid-template-columns:minmax(230px,.66fr) repeat(2,minmax(0,1fr));gap:21px;align-items:start}
+.chat-grid.single{grid-template-columns:minmax(280px,.63fr) minmax(0,1.37fr);gap:35px}
+.context{border-top:3px solid #8c1515;background:#faf8f7;padding:15px 17px;color:#414141;font-size:18px}
+.context h2,.chat h2{font-size:22px;margin:0 0 12px}
+.context p{margin:0 0 10px}
+.context ul{padding-left:19px}
+.context li+li{margin-top:8px}
+.context code{font-size:.84em;overflow-wrap:anywhere}
+.chat{min-width:0}
+.chat+.chat{border-left:1px solid #ddd;padding-left:20px}
+.message{display:flex;flex-direction:column;max-width:96%;margin:8px 0 11px;gap:3px}
+.message.user{align-items:flex-end;margin-left:auto;max-width:87%}
+.message.assistant{align-items:flex-start;margin-right:auto;max-width:92%}
+.message small{font-size:12px;font-weight:700;color:#666;letter-spacing:.04em;padding:0 8px}
+.bubble{display:inline-block;border-radius:18px;padding:10px 13px;color:#222;font-size:18px;line-height:1.32;overflow-wrap:anywhere}
+.user .bubble{background:#f0f0f0;border-bottom-right-radius:5px}
+.assistant .bubble{background:#fff;border:1px solid #dedede;border-bottom-left-radius:5px}
+.bubble code{font-family:Menlo,Consolas,monospace;font-size:.85em}
+.trace{display:flex;align-items:baseline;gap:9px;border-left:3px solid #8c1515;padding:4px 8px;background:#fbf7f7;margin:8px 0;font-size:15px}
+.trace b{color:#8c1515;flex-shrink:0;font-size:11px;letter-spacing:.04em}
+.trace span{min-width:0;overflow-wrap:anywhere;color:#393939}
+.trace code{font-size:13px}
+.trace.plain{border-color:#b7b7b7;background:#f7f7f7}
+.trace.plain b{color:#555}
+.raw{font-size:14px;color:#8c1515;margin:11px 0 0}
+.raw summary{cursor:pointer;font-weight:700}
+.raw[open] .raw-data{position:absolute;z-index:2;inset:125px 55px 80px 55px;overflow:auto;background:white;
+  border:1px solid #a0a0a0;box-shadow:0 8px 25px #0002;padding:18px;color:#252525}
+.raw-data button{float:right;font:inherit;cursor:pointer}
+.raw-data pre{font:14px/1.45 Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.takeaway{color:#8c1515;font-weight:700}
+.small{font-size:20px}
+.spaced{margin-top:20px!important}
+footer{position:absolute;left:55px;right:55px;bottom:25px;display:flex;gap:12px;align-items:center;
+  color:#666;font-size:15px}
+footer .brand{border-left:4px solid #8c1515;padding-left:9px}
+footer .source{margin-left:auto;text-align:right}
+body.capture nav,body.capture .raw{display:none}
+body.capture .scene{height:720px;margin:0}
+body.capture{background:#fff}
+@media(max-width:800px){.scene{padding:32px 24px 120px}.split,.split.ratio,.chat-grid,.chat-grid.single{grid-template-columns:1fr;gap:20px}
+.pane+.pane{border-left:0;border-top:1px solid #d4d4d4;padding:17px 0 0}.scene h1,.cover h1{font-size:41px}
+.chat+.chat{border-left:0;border-top:1px solid #ddd;padding:12px 0 0}.raw[open] .raw-data{position:static;margin-top:10px;max-height:55vh}
+footer{left:24px;right:24px;align-items:flex-start}footer .source{max-width:45%}nav .hint{display:none}}
+</style>
+<nav aria-label="Replay controls"><button id="previous" type="button">Back</button><div id="slides"></div>
+<button id="next" type="button">Next</button><span class="hint">Use the arrow keys to step through the replay</span></nav>
+<main><!-- SCENES --></main>
+<script>
+const scenes = [...document.querySelectorAll('.scene')];
+const steps = scenes.flatMap((scene, index) =>
+  Array.from({length: Number(scene.dataset.steps)}, (_, step) => ({index, step})));
+const previous = document.querySelector('#previous');
+const next = document.querySelector('#next');
+const buttons = scenes.map((scene, index) => {
+  const button = document.createElement('button');
+  button.textContent = String(index + 1);
+  button.setAttribute('aria-label', scene.querySelector('h1').textContent);
+  button.onclick = () => { location.hash = `s${index}-0`; };
+  document.querySelector('#slides').append(button);
+  return button;
+});
+document.querySelector('#slides').style.cssText = 'display:flex;gap:5px;flex-wrap:wrap';
+let selected = 0;
+function show() {
+  selected = Math.max(0, steps.findIndex(({index, step}) => location.hash === `#s${index}-${step}`));
+  const {index, step} = steps[selected];
+  scenes.forEach((scene, number) => {
+    for (const detail of scene.querySelectorAll(".raw")) detail.open = false;
+    scene.hidden = number !== index;
+    buttons[number].setAttribute('aria-current', String(number === index));
+    for (const part of scene.querySelectorAll('[data-reveal]')) {
+      part.hidden = Number(part.dataset.reveal) > step;
+    }
+    for (const part of scene.querySelectorAll('[data-only]')) {
+      part.hidden = Number(part.dataset.only) !== step;
+    }
+  });
+  previous.disabled = selected === 0;
+  next.disabled = selected === steps.length - 1;
+}
+function stepBy(change) {
+  const position = steps[selected + change];
+  if (position) location.hash = `s${position.index}-${position.step}`;
+}
+previous.onclick = () => stepBy(-1);
+next.onclick = () => stepBy(1);
+document.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft') stepBy(-1);
+  if (event.key === 'ArrowRight') stepBy(1);
+});
+if (new URLSearchParams(location.search).has('capture')) document.body.classList.add('capture');
+window.addEventListener('hashchange', show);
+show();
+</script>
+</html>

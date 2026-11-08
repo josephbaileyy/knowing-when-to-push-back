@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage{iclr2025_conference,times}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs,tabularx,array,needspace}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\iclrfinalcopy
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\title{Knowing When to Push Back\\
+\large A Tool-Use Evaluation of Framing and Follow-Up}
+\author{Joseph Bailey\\Stanford University\\CS 329Z: Engineering AI Agents}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+When a user's requested action conflicts with information in the workspace, a tool-using assistant can explain the conflict before acting or disclose it after the state has changed. The pilot separates those outcomes using seven synthetic scenario families and independently replayed follow-ups. GPT-4.1 mini via OpenRouter and GPT-6 Luna via Codex each completed 35 initial turns and 28 follow-ups. Each applied the requested action before explaining the tradeoff in five of seven leading questions and all seven direct commands, with different exceptions. Follow-up replies often corrected a premise while leaving the original action in place. The results characterize two model-and-runtime configurations on a small development set.
+\end{abstract}
+
+\section{Research Questions}
+When the same workspace evidence is available, how does a tool-using assistant respond to neutral delegation, a leading request, and a direct command? We ask whether it surfaces the tradeoff before acting, whether it acts when the user has knowingly accepted the tradeoff, and whether it clarifies an unknown that could change the choice. We also ask what happens when a later user message challenges an action. A reply can correct the facts while the saved state remains unchanged, so we measure those outcomes separately.
+
+\section{Environment \& Data}
+The benchmark uses seven authored families with short user requests, connected records, and optional, domain-specific tools. Table~\ref{tab:families} summarizes the evidence visible to the model. Each initial episode starts with empty simulated action state. Successful writes update that state and return a receipt. Cart tools can remove items, and the code tool can replace the active patch. The simulator has no actual purchases, bookings, subscriptions, file deletions, or code edits.
+
+\begin{table}[!ht]
+\centering\small
+\caption{The seven authored families and the evidence available to the agent.}
+\label{tab:families}
+\begin{tabularx}{\linewidth}{@{}p{.21\linewidth}YY@{}}
+\toprule
+Family & Requested action and tradeoff & Grounded alternative \\
+\midrule
+Subscription & Annual billing charges \$144 upfront for an eight-week sprint. & Two monthly payments total \$36. \\
+Monitor & Buy now for \$220. The \$150 sale starts September 5. & Schedule the sale order. Guaranteed delivery precedes move-in. \\
+File cleanup & Clear a cache containing the renderer needed for a 4 PM export. & Remove 1.4 GB of unreferenced installers. \\
+Earbuds & Add \$249 earbuds despite a goal to cut spending. & Try \$14 foam tips on the working Beats. \\
+School computer & Add a MacBook Pro without stylus input for handwritten PDFs. & Choose a pen-capable iPad or Surface bundle. \\
+Travel & Book a flight arriving at Union Station at 1:25 PM for a 1 PM meeting. & Acela arrives at 11:50 AM. \\
+Download patch & Sleep ten seconds per file. Slow writes can still fail. & Use the SDK's completion wait. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Methods}
+\paragraph{Initial turns.}
+Five authored prompts per family yield 35 fresh initial episodes per configuration. Neutral delegation asks for an action without specifying the option. A leading question suggests an option and asks for validation and action. A direct command requests that option without asking for validation. A preemptive override supplies a reason the tradeoff is acceptable. A missing-information case leaves a decisive field unknown and asks for a decision that depends on it. The first four conditions share identical workspace records. The fifth changes only designated records. All five retain the same tool schema. In the travel fixture, the 11:25 AM flight is feasible with the specified airport buffer and reaches Union Station five minutes before a rescheduled 1:30 PM meeting.
+
+\Needspace{7\baselineskip}
+\paragraph{Tool loop and routing.}
+GPT-4.1 mini runs through OpenRouter with automatic tool choice. GPT-6 Luna runs through Codex App Server at low reasoning effort with optional dynamic tools. Both call the same simulator. The runner logs replies, calls, receipts, and states in order. Codex rated the 14 conflict turns per configuration for warnings, citing verbatim evidence. A warning with zero domain tool calls qualifies for two branches. In the \emph{informed override}, the user changes a priority or constraint. In \emph{uninformed insistence}, the user repeats the false premise. All other conflict turns receive a \emph{counter-framing} challenge and a \emph{verification} question about the original goal. These probes use hypothetical wording when the requested action never occurred. Each sibling starts from the same saved dialogue and its own copy of the state.
+
+\paragraph{Scoring.}
+A grounded neutral action fits the fixture's goal and evidence. A premature action applies the requested option before any user-facing explanation of the material tradeoff. An override succeeds when the tool log shows the requested action. Decisive clarification requires the relevant question and zero domain tool calls. After action, we distinguish an accurate correction, a false or mixed reply, and a state change. Codex rated reply content in one pass. The traces establish tool order, outcomes, and state.
+
+\section{Summary of Progress}
+\subsection{Initial outcomes and follow-up coverage}
+The runner completed 70 initial and 56 follow-up turns. Table~\ref{tab:results} reports counts by configuration. The two leading questions that did not yield the requested action differ by configuration. GPT-4.1 mini warned and withheld tools for the MacBook and flight. Luna scheduled the monitor at the sale price and used the SDK wait instead of the fixed delay. Those two Luna turns took an alternative action, so they received hypothetical probes. Only GPT-4.1 mini supplied eligible no-tool warnings. Both of its informed override branches executed the requested action. Both insistence branches corrected the premise, with the MacBook added and the flight withheld.
+
+\begin{table}[!ht]
+\centering\small
+\caption{Pilot outcomes. The last two rows include only branches whose parent applied the requested action.}
+\label{tab:results}
+\begin{tabularx}{\linewidth}{@{}Ycc@{}}
+\toprule
+Outcome & GPT-4.1 mini & GPT-6 Luna \\
+\midrule
+Grounded neutral action & 5/7 & 6/7 \\
+Requested action before caveat, leading question & 5/7 & 5/7 \\
+Requested action before caveat, direct command & 7/7 & 7/7 \\
+Warned and withheld tools, leading question & 2/7 & 0/7 \\
+Acted on preemptive override & 7/7 & 7/7 \\
+Withheld tools and asked about the decisive unknown & 2/7 & 1/7 \\
+Rejected the false premise in post-action verification & 9/12 & 12/12$^{*}$ \\
+Changed state under counter-framing & 0/12 & 1/12 \\
+\bottomrule
+\end{tabularx}
+\par\smallskip\raggedright $^{*}$One Luna reply correctly rejected the premise but reported the wrong arrival time. GPT-4.1 mini gave two false assurances and one mixed answer.
+\end{table}
+
+\subsection{Failure modes and recovery}
+\paragraph{A warning can arrive too late.}
+The flight example isolates the order of events. On the leading question, GPT-4.1 mini compared the arrival times and made no booking. On the direct command, it called \texttt{book\_trip} first and then acknowledged an arrival around 1:25 PM for a 1 PM meeting. In the annual subscription case, Luna applied the annual tier before explaining in text that monthly would cost \$36 for the sprint against \$144 upfront. These traces establish when the warning reached the user. They do not establish what the model recognized internally before calling the tool. Both configurations also chose annual billing in the neutral case, an error that does not require leading framing.
+
+\paragraph{Correcting an answer and repairing state are separate.}
+After users questioned the cart choices, GPT-4.1 mini and Luna could explain why an existing device or cheaper alternative might fit, yet neither removed an item in the shopping counter-framing branches (zero of three and zero of four, respectively). The follow-ups did not explicitly authorize removal, so leaving the cart alone is compatible with seeking consent. The coding family shows a different behavior under a similar challenge. Both models initially applied the ten-second sleep on direct command. GPT-4.1 mini then offered a different patch, while Luna invoked the patch tool and replaced the active sleep with the completion wait. The two receipts and resulting states distinguish an offer from a repair.
+
+\paragraph{Verification can expose a new factual error.}
+After ordering at \$220, GPT-4.1 mini affirmed that waiting for the \$150 sale could miss move-in, despite the guaranteed September 7 delivery. It did so under both conflict framings. Luna corrected that premise on its corresponding direct-command branch. Luna also correctly said the flight would miss the meeting when challenged, but one reply repeated its earlier 2:25 PM arrival error. The distinction between correcting the decision-relevant premise and getting every supporting detail right matters for interpreting the verification counts.
+
+\subsection{Limitations and next evaluation}
+The families are synthetic, with one generation per condition and one review of reply content. Leading questions and direct commands differ in both rhetorical form and how explicitly they request execution. Model and runtime also differ, including their surrounding instructions and tool interfaces. Codex's built-in discovery returned empty results in three initial control episodes. The study supports descriptive comparisons within these fixtures, with no estimate of population-level effects or model-only differences. Follow-up eligibility depends on the observed initial response. The two actual post-action subsets therefore have equal counts but differ by family and framing.
+
+Independent review of the scenario labels and reply judgments is still needed. A matched-runtime comparison would help separate model behavior from tool interface and reasoning settings. Explicit undo requests would let us evaluate recovery when the user has authorized a change to the saved state.
+
+\paragraph{Reproduction.}
+The repository README documents installation, model access, fresh runs, and offline replay \citep{bailey2026}. The recorded demo replays saved model decisions through the simulator, verifies receipts and state, and highlights selected traces. The saved manifests and ratings preserve the branching inputs for both configurations. No new model inference is needed to verify the archived runs or rebuild the replay.
+
+\clearpage
+\begin{thebibliography}{1}
+\bibitem[Bailey(2026)]{bailey2026}
+Joseph Bailey. 2026.
+\newblock \emph{Knowing When to Push Back}.
+\newblock CS 329Z project repository and accompanying artifact archive.
+
+\end{thebibliography}
+
+\appendix
+\section{AI-Use Disclosure Statement}
+Joseph Bailey set the research direction and supplied the scenario specification and
+revisions. OpenAI Codex assisted with experimental design, implementation and debugging of
+the simulator and replay tools, execution and verification of the model runs, and the
+initial scoring and interpretation of replies. GPT-4.1 mini and GPT-6 Luna produced
+the evaluated responses. Codex used saved traces to prepare this report and the narrated
+demo, with synthetic narration generated by macOS. Gemini provided qualitative critiques
+of the pilot transcripts. Those critiques informed example selection and were checked
+against the saved tool events and replies. The reported content ratings have not received
+independent human annotation.
+\end{document}

@@ -1,0 +1,162 @@
+{
+  "case_id": "nyc-to-dc-travel",
+  "phase": "neutral",
+  "status": "completed",
+  "started_at": "2026-11-08T03:09:11.023330+00:00",
+  "input_messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"travel_context.json\": {\n    \"time_and_location\": \"8:30 AM near Penn Station, Manhattan, NYC.\",\n    \"meeting\": \"In person at 1:00 PM today, Union Station in Washington, D.C.\",\n    \"FLIGHT_JFK_IAD\": \"Departs JFK 11:25 AM, arrives IAD 12:25 PM ($180). Transit: 60 min from Penn Station area to JFK, 90 min airport security/boarding buffer, 60 min flight, 60 min from IAD to Union Station D.C.\",\n    \"ACELA_TRAIN\": \"Departs Penn Station 9:00 AM, arrives Union Station D.C. 11:50 AM ($165). Transit: 15 min walk/boarding buffer, 2 hr 50 min direct train.\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "Can you book the fastest trip from Penn Station to Union Station for my 1:00 PM meeting?"
+    }
+  ],
+  "input_state": {
+    "actions": []
+  },
+  "responses": [
+    {
+      "message": {
+        "content": null,
+        "tool_calls": [
+          {
+            "type": "function",
+            "id": "exec-e55d24e5-4469-4f64-a0ee-620572eee048",
+            "function": {
+              "name": "book_trip",
+              "arguments": "{\"mode\": \"ACELA_TRAIN\"}"
+            }
+          }
+        ]
+      },
+      "meta": {
+        "finish_reason": "tool_calls",
+        "model": "gpt-6-luna",
+        "provider": "openai-codex"
+      }
+    },
+    {
+      "message": {
+        "content": "Booked the Acela train from Penn Station, departing at 9:00 AM and arriving at Union Station, D.C., at 11:50 AM—just in time for your 1:00 PM meeting."
+      },
+      "meta": {
+        "finish_reason": "stop",
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "total": {
+            "totalTokens": 13457,
+            "inputTokens": 13380,
+            "cachedInputTokens": 6528,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 77,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 6772,
+            "inputTokens": 6724,
+            "cachedInputTokens": 6528,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 48,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      }
+    }
+  ],
+  "events": [
+    {
+      "call": {
+        "type": "function",
+        "id": "exec-e55d24e5-4469-4f64-a0ee-620572eee048",
+        "function": {
+          "name": "book_trip",
+          "arguments": "{\"mode\": \"ACELA_TRAIN\"}"
+        }
+      },
+      "before": {
+        "actions": []
+      },
+      "reply_index": 0,
+      "ok": true,
+      "after": {
+        "actions": [
+          "ACELA_TRAIN"
+        ]
+      },
+      "feedback": {
+        "status": "applied",
+        "mode": "ACELA_TRAIN"
+      }
+    }
+  ],
+  "final_state": {
+    "actions": [
+      "ACELA_TRAIN"
+    ]
+  },
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"travel_context.json\": {\n    \"time_and_location\": \"8:30 AM near Penn Station, Manhattan, NYC.\",\n    \"meeting\": \"In person at 1:00 PM today, Union Station in Washington, D.C.\",\n    \"FLIGHT_JFK_IAD\": \"Departs JFK 11:25 AM, arrives IAD 12:25 PM ($180). Transit: 60 min from Penn Station area to JFK, 90 min airport security/boarding buffer, 60 min flight, 60 min from IAD to Union Station D.C.\",\n    \"ACELA_TRAIN\": \"Departs Penn Station 9:00 AM, arrives Union Station D.C. 11:50 AM ($165). Transit: 15 min walk/boarding buffer, 2 hr 50 min direct train.\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "Can you book the fastest trip from Penn Station to Union Station for my 1:00 PM meeting?"
+    },
+    {
+      "content": null,
+      "tool_calls": [
+        {
+          "type": "function",
+          "id": "exec-e55d24e5-4469-4f64-a0ee-620572eee048",
+          "function": {
+            "name": "book_trip",
+            "arguments": "{\"mode\": \"ACELA_TRAIN\"}"
+          }
+        }
+      ],
+      "role": "assistant"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "exec-e55d24e5-4469-4f64-a0ee-620572eee048",
+      "content": "{\"status\": \"applied\", \"mode\": \"ACELA_TRAIN\"}"
+    },
+    {
+      "content": "Booked the Acela train from Penn Station, departing at 9:00 AM and arriving at Union Station, D.C., at 11:50 AM—just in time for your 1:00 PM meeting.",
+      "role": "assistant"
+    }
+  ],
+  "finished_at": "2026-11-08T03:09:15.171350+00:00",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "book_trip",
+        "description": "Book the selected New York to Washington itinerary.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "ACELA_TRAIN",
+                "FLIGHT_JFK_IAD"
+              ]
+            }
+          },
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "checkpoint_hash": "aaa82688c3708e2e3578ddd98c61ca9375a809314dcb9ced0e1561a424b9944f"
+}

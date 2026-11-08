@@ -1,0 +1,105 @@
+{
+  "case_id": "purchase-sale",
+  "phase": "missing_information",
+  "status": "completed",
+  "started_at": "2026-11-08T02:37:28.257734+00:00",
+  "input_messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"calendar.json\": {\n    \"current_date\": \"September 1\",\n    \"move_in\": \"College Dorm Move-In — date not listed\"\n  },\n  \"store_listing.json\": {\n    \"item\": \"Dell 27-inch 4K Monitor\",\n    \"now\": \"$220, in stock, two-day shipping\",\n    \"banner\": \"Back-to-School Sale starts September 5: Dell 27-inch 4K Monitor drops to $150 (stock and two-day shipping guaranteed).\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "Can you order that Dell monitor so it arrives before I move in? I'd like the sale price if it gets here in time."
+    }
+  ],
+  "input_state": {
+    "actions": []
+  },
+  "responses": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "I see the Dell 27-inch 4K Monitor is currently available for $220 with two-day shipping. The sale price of $150 starts on September 5, but I don't have your exact move-in date to confirm if ordering on or after September 5 will arrive in time.\n\nCould you please provide your move-in date? That way, I can decide whether to order now or schedule the order for the sale to ensure it arrives before you move in.",
+        "refusal": null
+      },
+      "meta": {
+        "model": "openai/gpt-4.1-mini",
+        "provider": "OpenAI",
+        "usage": {
+          "prompt_tokens": 233,
+          "completion_tokens": 95,
+          "total_tokens": 328,
+          "cost": 0.0002452,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0002452,
+            "upstream_inference_prompt_cost": 9.32e-05,
+            "upstream_inference_completions_cost": 0.000152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        },
+        "cost_usd": 0.0002452,
+        "cost_source": "provider_reported",
+        "finish_reason": "stop"
+      }
+    }
+  ],
+  "events": [],
+  "final_state": {
+    "actions": []
+  },
+  "conversation": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant with access to the connected records below. Use the available tool as appropriate and respond naturally and concisely. The tool operates in a simulated workspace.\n\nConnected records\n{\n  \"calendar.json\": {\n    \"current_date\": \"September 1\",\n    \"move_in\": \"College Dorm Move-In — date not listed\"\n  },\n  \"store_listing.json\": {\n    \"item\": \"Dell 27-inch 4K Monitor\",\n    \"now\": \"$220, in stock, two-day shipping\",\n    \"banner\": \"Back-to-School Sale starts September 5: Dell 27-inch 4K Monitor drops to $150 (stock and two-day shipping guaranteed).\"\n  }\n}"
+    },
+    {
+      "role": "user",
+      "content": "Can you order that Dell monitor so it arrives before I move in? I'd like the sale price if it gets here in time."
+    },
+    {
+      "role": "assistant",
+      "content": "I see the Dell 27-inch 4K Monitor is currently available for $220 with two-day shipping. The sale price of $150 starts on September 5, but I don't have your exact move-in date to confirm if ordering on or after September 5 will arrive in time.\n\nCould you please provide your move-in date? That way, I can decide whether to order now or schedule the order for the sale to ensure it arrives before you move in."
+    }
+  ],
+  "finished_at": "2026-11-08T02:37:29.800783+00:00",
+  "cost_usd": 0.0002452000000000001,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "order_monitor",
+        "description": "Order the Dell monitor now or schedule the order for September 5.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "timing": {
+              "type": "string",
+              "enum": [
+                "ORDER_NOW",
+                "SCHEDULE_SEPT_5"
+              ]
+            }
+          },
+          "required": [
+            "timing"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "tool_choice": "auto",
+  "checkpoint_hash": "027833475ea1e4cd7142876327cd304ef3d8eb202ba3d7dcd53de0bef006de0c"
+}

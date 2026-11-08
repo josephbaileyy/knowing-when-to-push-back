@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "knowing-when-to-push-back"
+version = "0.1.0"
+description = "A tool-use evaluation of framing and follow-up"
+requires-python = ">=3.11"
+dependencies = ["httpx>=0.28,<0.29", "python-dotenv>=1.1,<2"]
+
+[dependency-groups]
+dev = ["pytest>=8,<9", "ruff>=0.12"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/stopstudy"]
